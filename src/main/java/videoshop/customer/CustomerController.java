@@ -45,14 +45,22 @@ class CustomerController {
 	@PostMapping("/register")
 	String registerNew(@Valid RegistrationForm form, Errors result) {
 
+		form.validate(result);//
+		
 		if (result.hasErrors()) {
 			return "register";
 		}
 
 		// (｡◕‿◕｡)
 		// Falles alles in Ordnung ist legen wir einen Customer an
-		customerManagement.createCustomer(form);
-
+		//use try catch to catch IllegalArgumentException Error
+		try {
+			customerManagement.createCustomer(form);
+	    } 
+		catch (IllegalArgumentException e) {
+	        result.rejectValue("name", "error.form", e.getMessage()); 
+	        return "register"; 
+		}
 		return "redirect:/";
 	}
 
@@ -70,3 +78,4 @@ class CustomerController {
 		return "customers";
 	}
 }
+
