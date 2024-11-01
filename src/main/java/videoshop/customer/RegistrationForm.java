@@ -48,12 +48,13 @@ import org.springframework.validation.Errors;
  */
 class RegistrationForm {
 
-	private final @NotEmpty String name, password, address;
+	private final @NotEmpty String name, password,confirmPassword, address;//
 
-	public RegistrationForm(String name, String password, String address) {
+	public RegistrationForm(String name, String password, String confirmPassword, String address) {//
 
 		this.name = name;
 		this.password = password;
+		this.confirmPassword = confirmPassword;//
 		this.address = address;
 	}
 
@@ -64,12 +65,20 @@ class RegistrationForm {
 	public String getPassword() {
 		return password;
 	}
-
+	
+	public String getconfirmPassword() {//
+		return confirmPassword;
+	}
+	
 	public String getAddress() {
 		return address;
 	}
 
-	public void validate(Errors errors) {
+	public void validate(Errors errors) {//[改]
 		// Complex validation goes here
+		if (!password.equals(confirmPassword)) {//
+			errors.rejectValue("confirmPassword", "password.mismatch", "Passwords and confirmpasswords are different.");
+		}
 	}
 }
+
