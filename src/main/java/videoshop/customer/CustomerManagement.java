@@ -62,6 +62,12 @@ public class CustomerManagement {
 	public Customer createCustomer(RegistrationForm form) {
 
 		Assert.notNull(form, "Registration form must not be null!");
+		
+		//use findByUsername to check if there is the username
+		var existUserAccount = userAccounts.findByUsername(form.getName());
+	    if (existUserAccount.isPresent()) {
+	        throw new IllegalArgumentException("UserName bereits besitzt!");
+	    }
 
 		var password = UnencryptedPassword.of(form.getPassword());
 		var userAccount = userAccounts.create(form.getName(), password, CUSTOMER_ROLE);
